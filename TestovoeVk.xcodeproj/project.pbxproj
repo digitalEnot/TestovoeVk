@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		73C912802CFD088B002BDEA2 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 73C9127F2CFD088B002BDEA2 /* RealmSwift */; };
+		73C912F12CFDB362002BDEA2 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 73C912F02CFDB362002BDEA2 /* SDWebImage */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		73C912612CFD0803002BDEA2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -53,11 +58,6 @@
 			path = TestovoeVkTests;
 			sourceTree = "<group>";
 		};
-		73C9126D2CFD0803002BDEA2 /* TestovoeVkUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TestovoeVkUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +65,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				73C912F12CFDB362002BDEA2 /* SDWebImage in Frameworks */,
+				73C912802CFD088B002BDEA2 /* RealmSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,7 +92,6 @@
 			children = (
 				73C9124C2CFD0802002BDEA2 /* TestovoeVk */,
 				73C912632CFD0803002BDEA2 /* TestovoeVkTests */,
-				73C9126D2CFD0803002BDEA2 /* TestovoeVkUITests */,
 				73C9124B2CFD0802002BDEA2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -125,6 +126,8 @@
 			);
 			name = TestovoeVk;
 			packageProductDependencies = (
+				73C9127F2CFD088B002BDEA2 /* RealmSwift */,
+				73C912F02CFDB362002BDEA2 /* SDWebImage */,
 			);
 			productName = TestovoeVk;
 			productReference = 73C9124A2CFD0802002BDEA2 /* TestovoeVk.app */;
@@ -166,9 +169,6 @@
 			dependencies = (
 				73C9126C2CFD0803002BDEA2 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				73C9126D2CFD0803002BDEA2 /* TestovoeVkUITests */,
-			);
 			name = TestovoeVkUITests;
 			packageProductDependencies = (
 			);
@@ -208,6 +208,10 @@
 			);
 			mainGroup = 73C912412CFD0802002BDEA2;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				73C9127E2CFD088B002BDEA2 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				73C912EF2CFDB362002BDEA2 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 73C9124B2CFD0802002BDEA2 /* Products */;
 			projectDirPath = "";
@@ -294,7 +298,6 @@
 				INFOPLIST_FILE = TestovoeVk/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -302,7 +305,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = org.136d7e96022370ba.TestovoeVk;
+				PRODUCT_BUNDLE_IDENTIFIER = org.evgennovikk.TestovoeVk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -322,7 +325,6 @@
 				INFOPLIST_FILE = TestovoeVk/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -330,7 +332,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = org.136d7e96022370ba.TestovoeVk;
+				PRODUCT_BUNDLE_IDENTIFIER = org.evgennovikk.TestovoeVk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -569,6 +571,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		73C9127E2CFD088B002BDEA2 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift";
+			requirement = {
+				branch = community;
+				kind = branch;
+			};
+		};
+		73C912EF2CFDB362002BDEA2 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.20.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		73C9127F2CFD088B002BDEA2 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 73C9127E2CFD088B002BDEA2 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+		73C912F02CFDB362002BDEA2 /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 73C912EF2CFDB362002BDEA2 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 73C912422CFD0802002BDEA2 /* Project object */;
 }
