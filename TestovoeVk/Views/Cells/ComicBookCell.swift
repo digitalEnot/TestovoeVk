@@ -65,8 +65,7 @@ class ComicBookCell: UITableViewCell {
         NSLayoutConstraint.activate([
             stackForText.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             stackForText.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            stackForText.trailingAnchor.constraint(equalTo: arrow.leadingAnchor, constant: -10),
-            stackForText.centerYAnchor.constraint(equalTo: centerYAnchor),
+            stackForText.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40),
             stackForText.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
             
             arrow.centerYAnchor.constraint(equalTo: centerYAnchor),

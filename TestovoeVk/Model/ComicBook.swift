@@ -22,24 +22,25 @@ struct data: Decodable {
 }
 
 
-struct ComicBook: Decodable {
+struct ComicBook: Decodable, Hashable {
+    let uniqueID = UUID().uuidString
     let id: Int?
-    let thumbnail: thumbnail
+//    let thumbnail: thumbnail
     let title: String?
     let textObjects: [TextObjects]
 }
 
-struct TextObjects: Decodable {
+struct TextObjects: Decodable, Hashable {
     let text: String?
 }
 
-
-struct thumbnail: Codable {
-    let image_path: String
-    let image_extension: String
-    
-    enum CodingKeys: String, CodingKey {
-        case image_path = "path"
-        case image_extension = "extension"
-    }
-}
+//
+//struct thumbnail: Codable, Hashable {
+//    let image_path: String
+//    let image_extension: String
+//    
+//    enum CodingKeys: String, CodingKey {
+//        case image_path = "path"
+//        case image_extension = "extension"
+//    }
+//}
