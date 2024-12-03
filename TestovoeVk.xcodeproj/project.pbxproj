@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		735120952CFF4191003DD492 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 73C9127F2CFD088B002BDEA2 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		73C912802CFD088B002BDEA2 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 73C9127F2CFD088B002BDEA2 /* RealmSwift */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +27,20 @@
 			remoteInfo = TestovoeVk;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		735120962CFF4191003DD492 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				735120952CFF4191003DD492 /* RealmSwift in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		73C9124A2CFD0802002BDEA2 /* TestovoeVk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestovoeVk.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -114,6 +129,7 @@
 				73C912462CFD0802002BDEA2 /* Sources */,
 				73C912472CFD0802002BDEA2 /* Frameworks */,
 				73C912482CFD0802002BDEA2 /* Resources */,
+				735120962CFF4191003DD492 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

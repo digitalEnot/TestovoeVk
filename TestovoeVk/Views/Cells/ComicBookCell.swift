@@ -34,9 +34,7 @@ class ComicBookCell: UITableViewCell {
         cellTitle.text = titleText
         cellDescription.text = descriptionText
         if cellDescription.text == nil {
-            stackForText.spacing = 0
-        } else {
-            stackForText.spacing = 10
+            cellDescription.text = "No description"
         }
     }
     
