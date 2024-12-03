@@ -20,7 +20,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = ComicsCollection()
+        let destVC = ComicsVC()
+        destVC.title = "Коммиксы"
+        window?.rootViewController = UINavigationController(rootViewController: destVC)
         window?.makeKeyAndVisible()
     }
 

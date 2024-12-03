@@ -7,14 +7,14 @@
 
 import UIKit
 
-final class ComicsCollection: UIViewController {
+final class ComicsVC: UIViewController {
     
     enum Section {
         case main
     }
-    
     var comics = [ComicBook]()
-    
+    var realmComics = [ComicBookDTo]()
+
     var page = 0
     var dataSourse: UITableViewDiffableDataSource<Section, ComicBook>!
     var isLoadingMoreFollowers = false
@@ -39,7 +39,7 @@ final class ComicsCollection: UIViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: ComicBookCell.reuseID, for: indexPath) as! ComicBookCell
             
             let descriptionText = comicBook.textObjects.count > 0 ? comicBook.textObjects[0].text : nil
-            guard let textTitle = comicBook.title else { return cell }
+            let textTitle = comicBook.title
             
             cell.setCell(titleText: textTitle, descriptionText: descriptionText)
             return cell
@@ -53,12 +53,19 @@ final class ComicsCollection: UIViewController {
             switch results {
             case .success(let comics):
                 self.comics.append(contentsOf: comics)
-                print(self.comics.count)
+//                print(self.comics.count)
                 updateData(on: self.comics)
             case .failure(let error):
                 print(error)
             }
             isLoadingMoreFollowers = false
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                TVKRealmStorage.shared.saveAirportList(self.comics)
+                self.realmComics = TVKRealmStorage.shared.getAirportList()
+//                print(realmComics)
+            }
         }
     }
     
@@ -88,11 +95,7 @@ final class ComicsCollection: UIViewController {
 }
 
 
-extension ComicsCollection: UITableViewDelegate {
-//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//
-//    }
-    
+extension ComicsVC: UITableViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let offsetY = comicsTable.contentOffset.y
         // The height of the content at the moment (how far we scroll down)
@@ -110,5 +113,15 @@ extension ComicsCollection: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+//        DispatchQueue.main.async { [weak self] in
+//            guard let self else { return }
+//            TVKRealmStorage.shared.deleteOneItem(item: realmComics[indexPath.row])
+//        }
+//        
+//        self.comics.remove(at: indexPath.row)
+//        updateData(on: self.comics)
+        
+        navigationController?.pushViewController(ComicBookVC(comicBook: realmComics[indexPath.row]), animated: true)
     }
 }
