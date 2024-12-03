@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7366A9432CFDD94100519737 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 7366A9422CFDD94100519737 /* SDWebImage */; };
 		73C912802CFD088B002BDEA2 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 73C9127F2CFD088B002BDEA2 /* RealmSwift */; };
 /* End PBXBuildFile section */
 
@@ -65,7 +64,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7366A9432CFDD94100519737 /* SDWebImage in Frameworks */,
 				73C912802CFD088B002BDEA2 /* RealmSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -127,7 +125,6 @@
 			name = TestovoeVk;
 			packageProductDependencies = (
 				73C9127F2CFD088B002BDEA2 /* RealmSwift */,
-				7366A9422CFDD94100519737 /* SDWebImage */,
 			);
 			productName = TestovoeVk;
 			productReference = 73C9124A2CFD0802002BDEA2 /* TestovoeVk.app */;
@@ -210,7 +207,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				73C9127E2CFD088B002BDEA2 /* XCRemoteSwiftPackageReference "realm-swift" */,
-				7366A9412CFDD94100519737 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 73C9124B2CFD0802002BDEA2 /* Products */;
@@ -573,14 +569,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7366A9412CFDD94100519737 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
-			requirement = {
-				kind = exactVersion;
-				version = 5.19.7;
-			};
-		};
 		73C9127E2CFD088B002BDEA2 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift";
@@ -592,11 +580,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7366A9422CFDD94100519737 /* SDWebImage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7366A9412CFDD94100519737 /* XCRemoteSwiftPackageReference "SDWebImage" */;
-			productName = SDWebImage;
-		};
 		73C9127F2CFD088B002BDEA2 /* RealmSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 73C9127E2CFD088B002BDEA2 /* XCRemoteSwiftPackageReference "realm-swift" */;

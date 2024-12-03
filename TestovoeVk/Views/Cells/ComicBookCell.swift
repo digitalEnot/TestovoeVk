@@ -1,80 +1,76 @@
 //
-//  MovieCell.swift
+//  ComicBookCell2.swift
 //  TestovoeVk
 //
-//  Created by Evgeni Novik on 02.12.2024.
+//  Created by Evgeni Novik on 03.12.2024.
 //
 
 import UIKit
-import SDWebImage
 
-final class ComicBookCell: UICollectionViewCell {
+class ComicBookCell: UITableViewCell {
     static let reuseID = "MovieCell"
     
-    let comicBookImage = UIImageView()
-    let comicBookTitle = UILabel()
-    let comicBookDescription = UILabel()
+    let stackForText = UIStackView()
+    let cellTitle = UILabel()
+    let cellDescription = UILabel()
+    let arrow = UIImageView()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = .blue
-        configure()
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        configureUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func set(comics: ComicBook) {
-        var urlString = comics.thumbnail.image_path + "." + comics.thumbnail.image_extension
-        if let index = urlString.index(urlString.startIndex, offsetBy: 4, limitedBy: urlString.endIndex) {
-            urlString.insert("s", at: index)
-        }
-        comicBookImage.sd_setImage(with: URL(string: urlString))
-        comicBookTitle.text = comics.title
-        if comics.textObjects.count > 0 {
-            comicBookDescription.text = comics.textObjects[0].text
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        clipsToBounds = true
+    }
+    
+    func setCell(titleText: String, descriptionText: String?) {
+        cellTitle.text = titleText
+        cellDescription.text = descriptionText
+        if cellDescription.text == nil {
+            stackForText.spacing = 0
+        } else {
+            stackForText.spacing = 10
         }
     }
     
-    func configure() {
-        addSubview(comicBookImage)
-        addSubview(comicBookTitle)
-        addSubview(comicBookDescription)
+    private func configureUI() {
+        addSubview(stackForText)
+        addSubview(arrow)
+        stackForText.addArrangedSubview(cellTitle)
+        stackForText.addArrangedSubview(cellDescription)
+        stackForText.axis = .vertical
+        stackForText.spacing = 10
+        stackForText.alignment = .leading
+        stackForText.translatesAutoresizingMaskIntoConstraints = false
         
-        comicBookImage.clipsToBounds = true
-        comicBookImage.contentMode = .scaleAspectFit
-        comicBookImage.translatesAutoresizingMaskIntoConstraints = false
+        arrow.image =  UIImage(systemName: "chevron.forward")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+        arrow.translatesAutoresizingMaskIntoConstraints = false
         
-        comicBookTitle.text = "Заголовок"
-        comicBookTitle.numberOfLines = 999
-        comicBookTitle.textColor = UIColor.black
-        comicBookTitle.font = UIFont.systemFont(ofSize: 20, weight: .medium)
-        comicBookTitle.translatesAutoresizingMaskIntoConstraints = false
+        cellTitle.text = "Настройки"
+        cellTitle.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        cellTitle.textColor = .black
+        cellTitle.numberOfLines = 0
         
-        comicBookDescription.numberOfLines = 9999
-        comicBookDescription.textColor = UIColor.black
-        comicBookDescription.font = UIFont.systemFont(ofSize: 16, weight: .light)
-        comicBookDescription.translatesAutoresizingMaskIntoConstraints = false
+        cellDescription.text = "Описание"
+        cellDescription.font = UIFont.systemFont(ofSize: 14, weight: .light)
+        cellDescription.numberOfLines = 0
         
         NSLayoutConstraint.activate([
+            stackForText.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            stackForText.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            stackForText.trailingAnchor.constraint(equalTo: arrow.leadingAnchor, constant: -10),
+            stackForText.centerYAnchor.constraint(equalTo: centerYAnchor),
+            stackForText.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
             
-            comicBookTitle.topAnchor.constraint(equalTo: topAnchor, constant: 5),
-            comicBookTitle.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
-            comicBookTitle.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2),
-            
-            comicBookDescription.topAnchor.constraint(equalTo: comicBookTitle.bottomAnchor, constant: 5),
-            comicBookDescription.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
-            comicBookDescription.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2),
-            
-            comicBookImage.topAnchor.constraint(equalTo: comicBookDescription.bottomAnchor, constant: 5),
-            comicBookImage.bottomAnchor.constraint(equalTo: bottomAnchor),
-            comicBookImage.leadingAnchor.constraint(equalTo: leadingAnchor),
-            comicBookImage.trailingAnchor.constraint(equalTo: trailingAnchor),
+            arrow.centerYAnchor.constraint(equalTo: centerYAnchor),
+            arrow.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
         ])
     }
-}
-
-#Preview() {
-    ComicsCollection()
 }
