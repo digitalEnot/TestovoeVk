@@ -10,7 +10,7 @@ import UIKit
 
 final class TVKTextField: UITextField {
     
-    private let padding = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 5)
+    private let padding = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 5)
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -40,6 +40,10 @@ final class TVKTextField: UITextField {
         layer.borderColor = UIColor.black.cgColor
         layer.cornerRadius = 8
         layer.borderColor = UIColor(.black).cgColor
+        
+        layer.borderColor = UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ? UIColor.white : UIColor.black
+        }.cgColor
         
         textColor = .label
         tintColor = .label

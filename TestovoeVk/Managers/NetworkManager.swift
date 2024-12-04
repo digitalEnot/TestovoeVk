@@ -21,21 +21,20 @@ final class NetworkManager {
     
     func getComics(offset: Int = 0) async throws -> [DataComicBook] {
         guard let url = URL(string: "\(Constants.baseURL)?ts=\(Constants.ts)&apikey=\(Constants.publicKey)&hash=\(Constants.hash)&offset=\(offset)") else {
-            throw URLError(.unknown)
+            throw TVKError.problemsWithURL
         }
         
         let (data, response) = try await URLSession.shared.data(from: url)
         
         guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-//            throw TMUError.problemsWithTheNetwork
-            throw URLError(.unknown)
+            throw TVKError.problemsWithTheNetwork
         }
         
         do {
             let results = try JSONDecoder().decode(ComicsResponse.self, from: data)
             return results.data.comicBooks
         } catch {
-            throw  URLError(.unknown)
+            throw  TVKError.problemsWithDecodingData
         }
     }
 

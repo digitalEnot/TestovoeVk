@@ -25,7 +25,9 @@ final class ComicBookVC: UIViewController {
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.layer.borderColor = UIColor.lightGray.cgColor
         tv.layer.cornerRadius = 8.0
-        tv.layer.borderColor = UIColor(.black).cgColor
+        tv.layer.borderColor = UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ? UIColor.white : UIColor.black
+        }.cgColor
         tv.layer.borderWidth = 2
         tv.font = UIFont.systemFont(ofSize: 16)
         return tv
@@ -83,7 +85,7 @@ final class ComicBookVC: UIViewController {
         signUpConfiguration.title = "Сохранить"
         signUpConfiguration.cornerStyle = .medium
         signUpConfiguration.baseBackgroundColor = .blue
-        signUpConfiguration.baseForegroundColor = .systemBackground
+        signUpConfiguration.baseForegroundColor = .white
         signUpConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
             outgoing.font = UIFont.systemFont(ofSize: 15, weight: .bold)

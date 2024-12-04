@@ -60,17 +60,29 @@ final class ComicsRealmStorage {
     
     func saveComicsList(_ data: [DataComicBook]) {
         let objects = data.map(ComicBookObject.init)
-        try? storage.saveOrUpdateAllObjects(objects: objects)
+        do {
+            try storage.saveOrUpdateAllObjects(objects: objects)
+        } catch {
+            print(TVKError.cantSaveToTheStorage)
+        }
     }
     
     func save(comicBook: ComicBook) {
         let item = ComicBookObject(comicBook)
-        try? storage.saveOrUpdateObject(object: item)
+        do {
+            try storage.saveOrUpdateObject(object: item)
+        } catch {
+            print(TVKError.cantSaveToTheStorage)
+        }
     }
     
     func delete(comicBook: ComicBook) {
         let item = ComicBookObject(comicBook)
-        try? storage.delete(by: item.self, primaryKey: item.uniqueID)
+        do {
+            try storage.delete(by: item.self, primaryKey: item.uniqueID)
+        } catch {
+            print(TVKError.cantDeleteFromTheStorage)
+        }
     }
 }
 

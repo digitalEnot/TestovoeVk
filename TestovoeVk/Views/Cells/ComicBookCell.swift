@@ -51,12 +51,12 @@ final class ComicBookCell: UITableViewCell {
         stackForText.alignment = .leading
         stackForText.translatesAutoresizingMaskIntoConstraints = false
         
-        arrow.image =  UIImage(systemName: "chevron.forward")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+        arrow.image =  UIImage(systemName: "chevron.forward")?.withTintColor(.label, renderingMode: .alwaysOriginal)
         arrow.translatesAutoresizingMaskIntoConstraints = false
         
         cellTitle.text = "Настройки"
         cellTitle.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-        cellTitle.textColor = .black
+        cellTitle.textColor = .label
         cellTitle.numberOfLines = 0
         
         cellDescription.text = "Описание"

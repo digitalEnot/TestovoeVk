@@ -74,12 +74,13 @@ final class ComicsVC: UIViewController {
         comicsTable.register(ComicBookCell.self, forCellReuseIdentifier: ComicBookCell.reuseID)
         comicsTable.delegate = self
         comicsTable.translatesAutoresizingMaskIntoConstraints = false
+        comicsTable.contentInset = UIEdgeInsets(top: -36, left: 0, bottom: 0, right: 0);
         
         NSLayoutConstraint.activate([
-            comicsTable.topAnchor.constraint(equalTo: view.topAnchor, constant: -20),
+            comicsTable.topAnchor.constraint(equalTo: view.topAnchor),
             comicsTable.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             comicsTable.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            comicsTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 20),
+            comicsTable.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
 }
