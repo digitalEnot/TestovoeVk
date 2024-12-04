@@ -7,13 +7,12 @@
 
 import UIKit
 
+
 final class ComicsVC: UIViewController {
     
     enum Section {
         case main
     }
-    var comics = [ComicBook]()
-    var realmComics = [ComicBookDTo]()
 
     var page = 0
     var dataSourse: UITableViewDiffableDataSource<Section, ComicBook>!
@@ -38,7 +37,7 @@ final class ComicsVC: UIViewController {
         dataSourse = UITableViewDiffableDataSource<Section, ComicBook>(tableView: comicsTable, cellProvider: { tableView, indexPath, comicBook in
             let cell = tableView.dequeueReusableCell(withIdentifier: ComicBookCell.reuseID, for: indexPath) as! ComicBookCell
             
-            let descriptionText = comicBook.textObjects.count > 0 ? comicBook.textObjects[0].text : nil
+            let descriptionText = comicBook.text
             let textTitle = comicBook.title
             
             cell.setCell(titleText: textTitle, descriptionText: descriptionText)
@@ -48,23 +47,14 @@ final class ComicsVC: UIViewController {
     
     private func getComics() {
         isLoadingMoreFollowers = true
-        APICaller.shared.getComics(offset: page * 20) { [weak self] results in
-            guard let self else { return }
-            switch results {
-            case .success(let comics):
-                self.comics.append(contentsOf: comics)
-//                print(self.comics.count)
-                updateData(on: self.comics)
-            case .failure(let error):
-                print(error)
-            }
-            isLoadingMoreFollowers = false
-            
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                TVKRealmStorage.shared.saveAirportList(self.comics)
-                self.realmComics = TVKRealmStorage.shared.getAirportList()
-//                print(realmComics)
+        Task {
+            do {
+                let comics = try await APICaller.shared.getComicsAsync(offset: page * 20)
+                TVKRealmStorage.shared.saveAirportList(comics)
+                updateData(on: TVKRealmStorage.shared.getAirportList())
+                isLoadingMoreFollowers = false
+            } catch {
+                print("Error when fecthing comics: \(error)")
             }
         }
     }
@@ -121,7 +111,25 @@ extension ComicsVC: UITableViewDelegate {
 //        
 //        self.comics.remove(at: indexPath.row)
 //        updateData(on: self.comics)
-        
-        navigationController?.pushViewController(ComicBookVC(comicBook: realmComics[indexPath.row]), animated: true)
+        let comicBooks = TVKRealmStorage.shared.getAirportList()
+        let path = ComicBookVC(comicBook: comicBooks[indexPath.row], indexPath: indexPath.row)
+        path.delegate = self
+        navigationController?.pushViewController(path, animated: true)
+    }
+}
+
+extension ComicsVC: ComicBookDelegate {
+    func didPressedSaveButton(comicBook: ComicBook) {
+        DispatchQueue.main.async { [weak self] in
+            TVKRealmStorage.shared.saveComicBook(item: comicBook)
+            self?.updateData(on: TVKRealmStorage.shared.getAirportList())
+        }
+    }
+    
+    func didPressedDeleteButton(deleteItem: ComicBook, indexPath: Int) {
+        DispatchQueue.main.async { [weak self] in
+            TVKRealmStorage.shared.deleteOneItem(item: deleteItem)
+            self?.updateData(on: TVKRealmStorage.shared.getAirportList())
+        }
     }
 }

@@ -7,12 +7,21 @@
 
 import UIKit
 
+protocol ComicBookDelegate: AnyObject {
+    func didPressedDeleteButton(deleteItem: ComicBook, indexPath: Int)
+    func didPressedSaveButton(comicBook: ComicBook)
+}
+
 class ComicBookVC: UIViewController {
     
     let titleTextField = TVKTextField()
     private let titleLabel = UILabel()
     private let descriptionLabel = UILabel()
     private let saveButton = UIButton()
+    private let indexPath: Int
+    private let comicBook: ComicBook
+    
+    weak var delegate: ComicBookDelegate?
     
     private var descriptionTextField: UITextView = {
         let tv = UITextView()
@@ -26,9 +35,11 @@ class ComicBookVC: UIViewController {
     }()
     
    
-    init(comicBook: ComicBookDTo) {
+    init(comicBook: ComicBook, indexPath: Int) {
+        self.comicBook = comicBook
         self.titleTextField.text = comicBook.title
         self.descriptionTextField.text = comicBook.text
+        self.indexPath = indexPath
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -109,14 +120,16 @@ class ComicBookVC: UIViewController {
     }
     
     @objc func buttonPressed() {
-        print("hello")
+        delegate?.didPressedSaveButton(comicBook: ComicBook(uniqueID: comicBook.uniqueID, title: titleTextField.text ?? "", text: descriptionTextField.text ?? ""))
+        navigationController?.popViewController(animated: true)
     }
     
     @objc func deleteComicBook() {
-        print("delete")
+        delegate?.didPressedDeleteButton(deleteItem: comicBook, indexPath: indexPath)
+        navigationController?.popViewController(animated: true)
     }
 }
 
 #Preview() {
-    ComicBookVC(comicBook: ComicBookDTo(object: ComicBookObject(uniqueID: "1231", title: "SuperMan", text: "lox")))
+    ComicBookVC(comicBook: ComicBook(object: ComicBookObject(uniqueID: "1231", title: "SuperMan", text: "lox")), indexPath: 2)
 }

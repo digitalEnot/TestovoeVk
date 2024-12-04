@@ -24,7 +24,7 @@ enum ApiError: Error {
 final class APICaller {
     static let shared = APICaller()
     
-    func getComics(offset: Int = 0, completion: @escaping (Result<[ComicBook], Error>) -> Void) {
+    func getComics(offset: Int = 0, completion: @escaping (Result<[DataComicBook], Error>) -> Void) {
         guard let url = URL(string: "\(Constants.baseURL)?ts=\(Constants.ts)&apikey=\(Constants.publicKey)&hash=\(Constants.hash)&offset=\(offset)") else { return }
         
         let task = URLSession.shared.dataTask(with: URLRequest(url: url)) { data, _, error in
@@ -39,4 +39,20 @@ final class APICaller {
         }
         task.resume()
     }
+    
+    func getComicsAsync(offset: Int = 0) async throws -> [DataComicBook] {
+        guard let url = URL(string: "\(Constants.baseURL)?ts=\(Constants.ts)&apikey=\(Constants.publicKey)&hash=\(Constants.hash)&offset=\(offset)") else {
+            throw URLError(.unknown)
+        }
+        
+        let (data, _) = try await URLSession.shared.data(from: url)
+        
+        do {
+            let results = try JSONDecoder().decode(ComicsResponse.self, from: data)
+            return results.data.comicBooks
+        } catch {
+            throw ApiError.failedToGetData
+        }
+    }
+
 }

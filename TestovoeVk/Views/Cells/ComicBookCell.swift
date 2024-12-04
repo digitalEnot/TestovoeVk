@@ -30,12 +30,19 @@ class ComicBookCell: UITableViewCell {
         clipsToBounds = true
     }
     
-    func setCell(titleText: String, descriptionText: String?) {
-        cellTitle.text = titleText
-        cellDescription.text = descriptionText
-        if cellDescription.text == nil {
-            cellDescription.text = "No description"
+    func setCell(titleText: String, descriptionText: String) {
+        if titleText == "" {
+            cellTitle.text = "No Title"
+        } else {
+            cellTitle.text = titleText
         }
+        
+        if descriptionText == "" {
+            cellDescription.text = "No Description"
+        } else {
+            cellDescription.text = descriptionText
+        }
+        
     }
     
     private func configureUI() {
