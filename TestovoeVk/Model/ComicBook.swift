@@ -20,8 +20,6 @@ struct data: Decodable {
     }
 }
 struct DataComicBook: Decodable, Hashable {
-    // в базе есть повторяющиеся объекты поэтму дадим им уникальный id для корректного отображения
-    let uniqueID = UUID().uuidString
     let title: String
     let textObjects: [TextObjects]
 }
@@ -47,12 +45,12 @@ final class ComicBookObject: Object {
         self.init()
         uniqueID = dto.uniqueID
         title = dto.title
-        text = dto.text
+        text = dto.description
     }
     
     convenience init(_ comicBook: DataComicBook) {
         self.init()
-        uniqueID = comicBook.uniqueID
+        uniqueID = UUID().uuidString
         title = comicBook.title
         text = comicBook.textObjects.count > 0 ? comicBook.textObjects[0].text : ""
     }
@@ -62,17 +60,17 @@ final class ComicBookObject: Object {
 struct ComicBook: Hashable {
     var uniqueID: String
     var title: String
-    var text: String
+    var description: String
     
     init(object: ComicBookObject) {
         uniqueID = object.uniqueID
         title = object.title
-        text = object.text
+        description = object.text
     }
     
     init(uniqueID: String, title: String, text: String) {
         self.uniqueID = uniqueID
         self.title = title
-        self.text = text
+        self.description = text
     }
 }

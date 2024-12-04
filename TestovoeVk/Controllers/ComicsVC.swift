@@ -14,10 +14,9 @@ final class ComicsVC: UIViewController {
         case main
     }
 
-    var page = 0
-    var dataSourse: UITableViewDiffableDataSource<Section, ComicBook>!
-    var isLoadingMoreFollowers = false
-    
+    private var page = 0
+    private var isLoadingMoreFollowers = false
+    private var dataSourse: UITableViewDiffableDataSource<Section, ComicBook>!
     private let comicsTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
         table.separatorStyle = .none
@@ -29,37 +28,25 @@ final class ComicsVC: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         getComics()
-        constraints()
         configureDataSourse()
-    }
-    
-    private func configureDataSourse() {
-        dataSourse = UITableViewDiffableDataSource<Section, ComicBook>(tableView: comicsTable, cellProvider: { tableView, indexPath, comicBook in
-            let cell = tableView.dequeueReusableCell(withIdentifier: ComicBookCell.reuseID, for: indexPath) as! ComicBookCell
-            
-            let descriptionText = comicBook.text
-            let textTitle = comicBook.title
-            
-            cell.setCell(titleText: textTitle, descriptionText: descriptionText)
-            return cell
-        })
+        setConstraints()
     }
     
     private func getComics() {
         isLoadingMoreFollowers = true
         Task {
             do {
-                let comics = try await APICaller.shared.getComicsAsync(offset: page * 20)
-                TVKRealmStorage.shared.saveAirportList(comics)
-                updateData(on: TVKRealmStorage.shared.getAirportList())
+                let comics = try await NetworkManager.shared.getComics(offset: page * 20)
+                ComicsRealmStorage.shared.saveComicsList(comics)
+                updateData(on: ComicsRealmStorage.shared.getComicsList())
                 isLoadingMoreFollowers = false
             } catch {
-                print("Error when fecthing comics: \(error)")
+                print("Ошибка при загрузке коммиксов: \(error)")
             }
         }
     }
     
-    func updateData(on comics: [ComicBook]) {
+    private func updateData(on comics: [ComicBook]) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, ComicBook>()
         snapshot.appendSections([.main])
         snapshot.appendItems(comics)
@@ -68,7 +55,20 @@ final class ComicsVC: UIViewController {
         }
     }
     
-    private func constraints() {
+    private func configureDataSourse() {
+        dataSourse = UITableViewDiffableDataSource<Section, ComicBook>(tableView: comicsTable, cellProvider: { tableView, indexPath, comicBook in
+            let cell = tableView.dequeueReusableCell(withIdentifier: ComicBookCell.reuseID, for: indexPath) as! ComicBookCell
+            
+            let descriptionText = comicBook.description
+            let textTitle = comicBook.title
+            
+            cell.setCell(titleText: textTitle, descriptionText: descriptionText)
+            return cell
+        })
+    }
+    
+    
+    private func setConstraints() {
         view.addSubview(comicsTable)
         comicsTable.separatorStyle = .singleLine
         comicsTable.register(ComicBookCell.self, forCellReuseIdentifier: ComicBookCell.reuseID)
@@ -88,11 +88,8 @@ final class ComicsVC: UIViewController {
 extension ComicsVC: UITableViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let offsetY = comicsTable.contentOffset.y
-        // The height of the content at the moment (how far we scroll down)
         let contentHeight = comicsTable.contentSize.height
-        // The height of the content with the n followers
         let height = comicsTable.frame.size.height
-        // The height of the phone
         
         if offsetY > (contentHeight - height) {
             guard !isLoadingMoreFollowers else { return }
@@ -103,33 +100,26 @@ extension ComicsVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
-//        DispatchQueue.main.async { [weak self] in
-//            guard let self else { return }
-//            TVKRealmStorage.shared.deleteOneItem(item: realmComics[indexPath.row])
-//        }
-//        
-//        self.comics.remove(at: indexPath.row)
-//        updateData(on: self.comics)
-        let comicBooks = TVKRealmStorage.shared.getAirportList()
+        let comicBooks = ComicsRealmStorage.shared.getComicsList()
         let path = ComicBookVC(comicBook: comicBooks[indexPath.row], indexPath: indexPath.row)
         path.delegate = self
         navigationController?.pushViewController(path, animated: true)
     }
 }
 
+
 extension ComicsVC: ComicBookDelegate {
     func didPressedSaveButton(comicBook: ComicBook) {
         DispatchQueue.main.async { [weak self] in
-            TVKRealmStorage.shared.saveComicBook(item: comicBook)
-            self?.updateData(on: TVKRealmStorage.shared.getAirportList())
+            ComicsRealmStorage.shared.save(comicBook: comicBook)
+            self?.updateData(on: ComicsRealmStorage.shared.getComicsList())
         }
     }
     
     func didPressedDeleteButton(deleteItem: ComicBook, indexPath: Int) {
         DispatchQueue.main.async { [weak self] in
-            TVKRealmStorage.shared.deleteOneItem(item: deleteItem)
-            self?.updateData(on: TVKRealmStorage.shared.getAirportList())
+            ComicsRealmStorage.shared.delete(comicBook: deleteItem)
+            self?.updateData(on: ComicsRealmStorage.shared.getComicsList())
         }
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 
 
-final class StorageService {
+final class StorageManager {
     private let storage: Realm?
     
     init(_ configuration: Realm.Configuration = Realm.Configuration(inMemoryIdentifier: "inMemory")) {
@@ -29,24 +29,13 @@ final class StorageService {
         }
     }
     
-    
-    func delete(object: ComicBookObject) throws {
+    func delete<T: Object>(by type: T, primaryKey: String) throws {
         guard let storage else { return }
         try storage.write {
-            guard let itemToDelete = storage.object(ofType: ComicBookObject.self, forPrimaryKey: object.uniqueID) else { return }
+            guard let itemToDelete = storage.object(ofType: T.self, forPrimaryKey: primaryKey) else { return }
             storage.delete(itemToDelete)
-//            storage.delete(object)
-//            storage.delete(Realm.object(obj)
         }
     }
-    
-    func deleteAll() throws {
-        guard let storage else { return }
-        try storage.write {
-            storage.deleteAll()
-        }
-    }
-    
     
     func fetch<T: Object>(by type: T.Type) -> [T] {
         guard let storage else { return [] }
@@ -55,53 +44,40 @@ final class StorageService {
 }
 
 
-extension Results {
-    func toArray() -> [Element] {
-        .init(self)
-    }
-}
-
-
-protocol ComicBookRepository {
-    func getAirportList() -> [ComicBook]
-    func saveAirportList(_ data: [DataComicBook])
-    func clearAirportList()
-}
-
-final class ComicBookRepositoryImpl: ComicBookRepository {
-    private let storage: StorageService
+final class ComicsRealmStorage {
+    static let shared = ComicsRealmStorage()
+    private let storage: StorageManager
     
-    init(storage: StorageService = StorageService()) {
+    
+    private init(storage: StorageManager = StorageManager()) {
         self.storage = storage
     }
     
-    func getAirportList() -> [ComicBook] {
+    func getComicsList() -> [ComicBook] {
         let data = storage.fetch(by: ComicBookObject.self)
         return data.map(ComicBook.init)
     }
     
-    func saveAirportList(_ data: [/*ComicBookDTo*/ DataComicBook]) {
+    func saveComicsList(_ data: [DataComicBook]) {
         let objects = data.map(ComicBookObject.init)
         try? storage.saveOrUpdateAllObjects(objects: objects)
     }
     
-    func saveComicBook(item: ComicBook) {
-        let item = ComicBookObject(item)
+    func save(comicBook: ComicBook) {
+        let item = ComicBookObject(comicBook)
         try? storage.saveOrUpdateObject(object: item)
     }
     
-    func deleteOneItem(item: ComicBook) {
-        let item = ComicBookObject(item)
-        try? storage.delete(object: item)
-    }
-    
-    func clearAirportList() {
-        try? storage.deleteAll()
+    func delete(comicBook: ComicBook) {
+        let item = ComicBookObject(comicBook)
+        try? storage.delete(by: item.self, primaryKey: item.uniqueID)
     }
 }
 
 
-class TVKRealmStorage {
-    static let shared = ComicBookRepositoryImpl()
-    private init() {}
+
+extension Results {
+    func toArray() -> [Element] {
+        .init(self)
+    }
 }

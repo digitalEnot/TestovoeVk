@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TVKTextField: UITextField {
+final class TVKTextField: UITextField {
     
     private let padding = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 5)
     
@@ -48,7 +48,6 @@ class TVKTextField: UITextField {
         autocorrectionType = .no
         clearButtonMode = .whileEditing
         
-//        attributedPlaceholder = NSAttributedString(string: placeholder)
         font = .boldSystemFont(ofSize: 15)
     }
 }

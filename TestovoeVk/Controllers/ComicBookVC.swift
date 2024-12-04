@@ -12,17 +12,14 @@ protocol ComicBookDelegate: AnyObject {
     func didPressedSaveButton(comicBook: ComicBook)
 }
 
-class ComicBookVC: UIViewController {
+final class ComicBookVC: UIViewController {
     
-    let titleTextField = TVKTextField()
     private let titleLabel = UILabel()
+    private let titleTextField = TVKTextField()
     private let descriptionLabel = UILabel()
     private let saveButton = UIButton()
     private let indexPath: Int
     private let comicBook: ComicBook
-    
-    weak var delegate: ComicBookDelegate?
-    
     private var descriptionTextField: UITextView = {
         let tv = UITextView()
         tv.translatesAutoresizingMaskIntoConstraints = false
@@ -34,11 +31,14 @@ class ComicBookVC: UIViewController {
         return tv
     }()
     
+    
+    weak var delegate: ComicBookDelegate?
+    
    
     init(comicBook: ComicBook, indexPath: Int) {
         self.comicBook = comicBook
         self.titleTextField.text = comicBook.title
-        self.descriptionTextField.text = comicBook.text
+        self.descriptionTextField.text = comicBook.description
         self.indexPath = indexPath
         super.init(nibName: nil, bundle: nil)
     }
@@ -50,7 +50,7 @@ class ComicBookVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configure()
+        configureUI()
         configureNavItems()
     }
     
@@ -60,10 +60,9 @@ class ComicBookVC: UIViewController {
     }
     
     
-    private func configure() {
+    private func configureUI() {
         view.backgroundColor = .systemBackground
         view.addSubview(descriptionTextField)
-        
         
         view.addSubview(titleLabel)
         titleLabel.text = "Заголовок"
@@ -95,7 +94,6 @@ class ComicBookVC: UIViewController {
         
         
         NSLayoutConstraint.activate([
-            
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 110),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
@@ -128,8 +126,4 @@ class ComicBookVC: UIViewController {
         delegate?.didPressedDeleteButton(deleteItem: comicBook, indexPath: indexPath)
         navigationController?.popViewController(animated: true)
     }
-}
-
-#Preview() {
-    ComicBookVC(comicBook: ComicBook(object: ComicBookObject(uniqueID: "1231", title: "SuperMan", text: "lox")), indexPath: 2)
 }

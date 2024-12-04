@@ -5,38 +5,39 @@
 //  Created by Evgeni Novik on 02.12.2024.
 //
 
-import UIKit
+import Foundation
+
+
+struct Constants {
+    static let publicKey = "5769e16e8e201f21907454de0170aee2"
+    static let ts = "1733138572"
+    static let hash = "4d73f49ea1627d34386efcf6f3dd8a26"
+    static let baseURL = "https://gateway.marvel.com:443/v1/public/comics"
+}
+
 
 final class NetworkManager {
-    let cache = NSCache<NSString, UIImage>()
     static let shared = NetworkManager()
-    private init() {}
-        
     
-    func downloadPhoto(from urlString: String) async throws -> UIImage {
-        let cacheKey = NSString(string: urlString)
-        
-        if let cachedImage = cache.object(forKey: cacheKey) {
-            return cachedImage
+    func getComics(offset: Int = 0) async throws -> [DataComicBook] {
+        guard let url = URL(string: "\(Constants.baseURL)?ts=\(Constants.ts)&apikey=\(Constants.publicKey)&hash=\(Constants.hash)&offset=\(offset)") else {
+            throw URLError(.unknown)
         }
-        guard let url = URL(string: urlString) else {
-            throw URLError(.resourceUnavailable)
-            //                throw TMUError.problemsWithURL
-        }
-        print(urlString)
         
         let (data, response) = try await URLSession.shared.data(from: url)
         
         guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-            //                throw TMUError.problemsWithTheNetwork
-            throw URLError(.resourceUnavailable)
-        }
-        guard let image = UIImage(data: data) else {
-            //                throw TMUError.problemsWithConvertingDataIntoImage
-            throw URLError(.resourceUnavailable)
+//            throw TMUError.problemsWithTheNetwork
+            throw URLError(.unknown)
         }
         
-        cache.setObject(image, forKey: cacheKey)
-        return image
+        do {
+            let results = try JSONDecoder().decode(ComicsResponse.self, from: data)
+            return results.data.comicBooks
+        } catch {
+            throw  URLError(.unknown)
+        }
     }
+
 }
+

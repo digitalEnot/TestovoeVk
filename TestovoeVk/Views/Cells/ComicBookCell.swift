@@ -7,13 +7,13 @@
 
 import UIKit
 
-class ComicBookCell: UITableViewCell {
+final class ComicBookCell: UITableViewCell {
     static let reuseID = "MovieCell"
     
-    let stackForText = UIStackView()
-    let cellTitle = UILabel()
-    let cellDescription = UILabel()
-    let arrow = UIImageView()
+    private let stackForText = UIStackView()
+    private let cellTitle = UILabel()
+    private let cellDescription = UILabel()
+    private let arrow = UIImageView()
     
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -25,10 +25,6 @@ class ComicBookCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        clipsToBounds = true
-    }
     
     func setCell(titleText: String, descriptionText: String) {
         if titleText == "" {
