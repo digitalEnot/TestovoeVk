@@ -7,6 +7,12 @@
 
 import UIKit
 
+enum FilterOpions: String, CaseIterable {
+    case title = "По названию"
+    case onsaleDate = "По дате продаж"
+    case issueNumber = "По идентификационному номеру"
+}
+
 
 final class ComicsVC: UIViewController {
     
@@ -16,8 +22,8 @@ final class ComicsVC: UIViewController {
 
     private var page = 0
     private var isLoadingMoreFollowers = false
+    private var orderBy = FilterOpions.title
     private var dataSourse: UITableViewDiffableDataSource<Section, ComicBook>!
-    private let spinner = UIActivityIndicatorView()
     private let comicsTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
         table.separatorStyle = .none
@@ -31,13 +37,40 @@ final class ComicsVC: UIViewController {
         getComics()
         configureDataSourse()
         setConstraints()
+        configureNavitems()
+    }
+    
+    private func configureNavitems() {
+        var children = [UIAction]()
+        FilterOpions.allCases.forEach { option in
+            let action = UIAction(title: option.rawValue) { [weak self] _ in
+                guard let self else { return }
+                self.orderBy = option
+                self.page = 0
+                ComicsRealmStorage.shared.deleteAllComics()
+                self.updateData(on: [])
+                self.getComics()
+            }
+            action.state = .on
+            children.append(action)
+        }
+        
+        let menu = UIMenu(title: "Фильтрация", options: .singleSelection, children: children)
+        
+        let filterButton = UIButton(type: .system)
+        filterButton.menu = menu
+        filterButton.setImage(UIImage(systemName: "line.3.horizontal.decrease.circle"), for: .normal)
+        
+        let barButtonItem = UIBarButtonItem(customView: filterButton)
+        filterButton.showsMenuAsPrimaryAction = true
+        navigationItem.rightBarButtonItem = barButtonItem
     }
     
     private func getComics() {
         isLoadingMoreFollowers = true
         Task {
             do {
-                let comics = try await NetworkManager.shared.getComics(offset: page * 20)
+                let comics = try await NetworkManager.shared.getComics(offset: page * 20, orderBy: orderBy)
                 ComicsRealmStorage.shared.saveComicsList(comics)
                 updateData(on: ComicsRealmStorage.shared.getComicsList())
                 isLoadingMoreFollowers = false
@@ -70,7 +103,8 @@ final class ComicsVC: UIViewController {
     
     private func createSpinnerFooter() -> UIView {
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 30))
-        
+        let spinner = UIActivityIndicatorView()
+        spinner.startAnimating()
         spinner.center = footerView.center
         footerView.addSubview(spinner)
         
@@ -105,7 +139,6 @@ extension ComicsVC: UITableViewDelegate {
         
         if offsetY > (contentHeight - height - 600) {
             guard !isLoadingMoreFollowers else { return }
-            spinner.startAnimating()
             page += 1
             getComics()
         }

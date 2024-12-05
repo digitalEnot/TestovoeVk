@@ -19,8 +19,8 @@ struct Constants {
 final class NetworkManager {
     static let shared = NetworkManager()
     
-    func getComics(offset: Int = 0) async throws -> [DataComicBook] {
-        guard let url = URL(string: "\(Constants.baseURL)?ts=\(Constants.ts)&apikey=\(Constants.publicKey)&hash=\(Constants.hash)&offset=\(offset)") else {
+    func getComics(offset: Int = 0, orderBy: FilterOpions) async throws -> [DataComicBook] {
+        guard let url = URL(string: "\(Constants.baseURL)?ts=\(Constants.ts)&apikey=\(Constants.publicKey)&hash=\(Constants.hash)&orderBy=\(orderBy)&offset=\(offset)") else {
             throw TVKError.problemsWithURL
         }
         
