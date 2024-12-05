@@ -137,7 +137,7 @@ extension ComicsVC: UITableViewDelegate {
         let contentHeight = comicsTable.contentSize.height
         let height = comicsTable.frame.size.height
         
-        if offsetY > (contentHeight - height - 600) {
+        if offsetY > (contentHeight - height) {
             guard !isLoadingMoreFollowers else { return }
             page += 1
             getComics()
