@@ -51,6 +51,7 @@ final class TVKTextField: UITextField {
         backgroundColor = .systemBackground
         autocorrectionType = .no
         clearButtonMode = .whileEditing
+        returnKeyType = .done
         
         font = .boldSystemFont(ofSize: 15)
     }

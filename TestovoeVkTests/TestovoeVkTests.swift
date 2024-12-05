@@ -9,28 +9,49 @@ import XCTest
 @testable import TestovoeVk
 
 final class TestovoeVkTests: XCTestCase {
+    
+    private var storage: ComicsRealmStorage!
 
+    
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        storage = ComicsRealmStorage.shared
     }
 
+    
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        storage = nil
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    
+    
+    func testSaveAndFetchComicBook() throws {
+        let comicBook = ComicBook(uniqueID: "12345", title: "Test Comic", text: "Text")
+        storage.save(comicBook: comicBook)
+        
+        let fetchedComics: [ComicBook] = storage.getComicsList()
+        
+        XCTAssertEqual(fetchedComics.last?.uniqueID, "12345")
+        XCTAssertEqual(fetchedComics.last?.title, "Test Comic")
+        XCTAssertEqual(fetchedComics.last?.description, "Text")
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    
+    func testDeleteObjectByPrimaryKey() throws {
+        storage.deleteAllComics()
+        let comicBook = ComicBook(uniqueID: "12345", title: "Test Comic", text: "Text")
+        
+        storage.delete(comicBook: comicBook)
+        let fetchedComics: [ComicBook] = storage.getComicsList()
+        
+        XCTAssertTrue(fetchedComics.isEmpty)
     }
-
+    
+    func testSaveOrUpdateAllObjects() throws {
+        storage.deleteAllComics()
+        let DatacomicBook1 = DataComicBook(title: "Title1", textObjects: [TextObjects(text: "Text1")])
+        let DatacomicBook2 = DataComicBook(title: "Title2", textObjects: [TextObjects(text: "Text2")])
+        
+        storage.saveComicsList([DatacomicBook1, DatacomicBook2])
+        let fetchedComics: [ComicBook] = storage.getComicsList()
+        
+        XCTAssertEqual(fetchedComics.count, 2)
+    }
 }

@@ -30,6 +30,7 @@ final class ComicBookVC: UIViewController {
         }.cgColor
         tv.layer.borderWidth = 2
         tv.font = UIFont.systemFont(ofSize: 16)
+        tv.returnKeyType = .done
         return tv
     }()
     
@@ -65,6 +66,7 @@ final class ComicBookVC: UIViewController {
     private func configureUI() {
         view.backgroundColor = .systemBackground
         view.addSubview(descriptionTextField)
+        descriptionTextField.delegate = self
         
         view.addSubview(titleLabel)
         titleLabel.text = "Заголовок"
@@ -73,6 +75,7 @@ final class ComicBookVC: UIViewController {
 
         view.addSubview(titleTextField)
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
+        titleTextField.delegate = self
         
         view.addSubview(descriptionLabel)
         descriptionLabel.text = "Описание"
@@ -127,5 +130,21 @@ final class ComicBookVC: UIViewController {
     @objc func deleteComicBook() {
         delegate?.didPressedDeleteButton(deleteItem: comicBook, indexPath: indexPath)
         navigationController?.popViewController(animated: true)
+    }
+}
+
+
+extension ComicBookVC: UITextViewDelegate, UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
     }
 }

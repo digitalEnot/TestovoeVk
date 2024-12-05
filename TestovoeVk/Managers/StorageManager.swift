@@ -37,6 +37,13 @@ final class StorageManager {
         }
     }
     
+    func deleteAll() throws {
+        guard let storage else { return }
+        try storage.write {
+            storage.deleteAll()
+        }
+    }
+    
     func fetch<T: Object>(by type: T.Type) -> [T] {
         guard let storage else { return [] }
         return storage.objects(T.self).toArray()
@@ -80,6 +87,14 @@ final class ComicsRealmStorage {
         let item = ComicBookObject(comicBook)
         do {
             try storage.delete(by: item.self, primaryKey: item.uniqueID)
+        } catch {
+            print(TVKError.cantDeleteFromTheStorage)
+        }
+    }
+    
+    func deleteAllComics() {
+        do {
+            try storage.deleteAll()
         } catch {
             print(TVKError.cantDeleteFromTheStorage)
         }
