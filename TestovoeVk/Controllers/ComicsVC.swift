@@ -17,6 +17,7 @@ final class ComicsVC: UIViewController {
     private var page = 0
     private var isLoadingMoreFollowers = false
     private var dataSourse: UITableViewDiffableDataSource<Section, ComicBook>!
+    private let spinner = UIActivityIndicatorView()
     private let comicsTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
         table.separatorStyle = .none
@@ -50,8 +51,8 @@ final class ComicsVC: UIViewController {
         var snapshot = NSDiffableDataSourceSnapshot<Section, ComicBook>()
         snapshot.appendSections([.main])
         snapshot.appendItems(comics)
-        DispatchQueue.main.async {
-            self.dataSourse.apply(snapshot, animatingDifferences: true)
+        DispatchQueue.main.async { [weak self] in
+            self?.dataSourse.apply(snapshot, animatingDifferences: true)
         }
     }
     
@@ -67,6 +68,15 @@ final class ComicsVC: UIViewController {
         })
     }
     
+    private func createSpinnerFooter() -> UIView {
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 30))
+        
+        spinner.center = footerView.center
+        footerView.addSubview(spinner)
+        
+        return footerView
+    }
+    
     
     private func setConstraints() {
         view.addSubview(comicsTable)
@@ -74,7 +84,8 @@ final class ComicsVC: UIViewController {
         comicsTable.register(ComicBookCell.self, forCellReuseIdentifier: ComicBookCell.reuseID)
         comicsTable.delegate = self
         comicsTable.translatesAutoresizingMaskIntoConstraints = false
-        comicsTable.contentInset = UIEdgeInsets(top: -36, left: 0, bottom: 0, right: 0);
+        comicsTable.contentInset = UIEdgeInsets(top: -36, left: 0, bottom: 0, right: 0)
+        comicsTable.tableFooterView = createSpinnerFooter()
         
         NSLayoutConstraint.activate([
             comicsTable.topAnchor.constraint(equalTo: view.topAnchor),
@@ -92,8 +103,9 @@ extension ComicsVC: UITableViewDelegate {
         let contentHeight = comicsTable.contentSize.height
         let height = comicsTable.frame.size.height
         
-        if offsetY > (contentHeight - height) {
+        if offsetY > (contentHeight - height - 600) {
             guard !isLoadingMoreFollowers else { return }
+            spinner.startAnimating()
             page += 1
             getComics()
         }
